@@ -2,7 +2,7 @@
   padding: 0 16px;
 }
 
-/* Стилі для пагінації */
+/* #region - Стилі для пагінації */
 .pagination {
   display: flex;
   justify-content: center;
@@ -33,3 +33,5 @@
   color: white;
   font-weight: bold;
 }
+
+/* #endregion - Стилі для пагінації */
