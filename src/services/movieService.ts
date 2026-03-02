@@ -11,7 +11,8 @@ import { type Movie } from '../types/movie';
 
 // Типізація відповіді від Axios
 interface MoviesHttpResponse {
-  results: Movie[];
+  results: Movie[]; // Відповідь містить масив фільмів у властивості results
+  total_pages: number; // Загальна кількість сторінок результатів
 }
 
 // Отримуємо значення змінної оточення (з файлу .env)
@@ -20,8 +21,11 @@ interface MoviesHttpResponse {
 const myKey = import.meta.env.VITE_TMDB_TOKEN;
 const myAuthorization = 'Bearer ' + myKey;
 
-export async function fetchMovies(nameQuery: string): Promise<Movie[]> {
-  const url = `https://api.themoviedb.org/3/search/movie?query=${nameQuery}&include_adult=false&language=en-US&page=1`;
+export async function fetchMovies(
+  nameQuery: string,
+  pageCurrent: number = 1
+): Promise<{ movies: Movie[]; totalPages: number }> {
+  const url = `https://api.themoviedb.org/3/search/movie?query=${nameQuery}&include_adult=false&language=en-US&page=${pageCurrent}`;
   const options = {
     method: 'GET',
     headers: {
@@ -35,6 +39,9 @@ export async function fetchMovies(nameQuery: string): Promise<Movie[]> {
   // console.log(response);
   // console.log('response.data');
   // console.log(response.data);
-  // Повертаємо значення results з відповіді
-  return response.data.results;
+  // Повертаємо значення results та total_pages відповіді
+  return {
+    movies: response.data.results,
+    totalPages: response.data.total_pages,
+  };
 }
